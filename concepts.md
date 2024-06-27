@@ -20,7 +20,7 @@ Algorithm looks something like $\theta_j := \theta_j - \alpha \sum_{i=1}^{m} \fr
 
 For linear regression, solving the normal equation $\theta = (X^T X)^{-1} X^T \vec{y}$ also analytically gives the optimal parameters
 
-## Probabilistic interpretation
+### Probabilistic interpretation
 
 - assume targets are linear function of the features plus a normally distributed error 
 - define the likelihood as the probability of seeing the targets given the inputs
@@ -42,7 +42,7 @@ $
 
 Maximizing log likelihood $\log L(\theta)$ is equivalent to minimizing the cost function $J(\theta) = \frac{1}{2} \sum_{i=1}^{m} \left( h_{\theta}(x^{(i)}) - y^{(i)} \right)^2$
 
-## Locally weighted linear regression
+### Locally weighted linear regression
 
 - introduce weights to the linear regression model so that data closest to the query point are most important
 
@@ -54,9 +54,9 @@ Note here $x$ is the query point, so the calculation much be repeated for every 
 
 
 
-# Classification and logistic regression
+## Classification and logistic regression
 
-## Logistic regression
+### Logistic regression
 
 - apply sigmoid to linear regression
 - model prediction based on $p(y \mid x; \theta) = \left( h_{\theta}(x) \right)^{y} \left( 1 - h_{\theta}(x) \right)^{1-y}$; e.g. $\theta^T x > 0$ predicts $y=1$
@@ -70,18 +70,72 @@ Likelihood is then $L(\theta) = \prod_{i=1}^{m} \left( h_{\theta}(x^{(i)}) \righ
 
 By maximizing log likelihood arrive at update rule $\theta_{j} := \theta_{j} + \alpha \left( y^{(i)} - h_{\theta}(x^{(i)}) \right) x_{j}^{(i)}$
 
-## Perceptron learning algorithm
+
+### Newton's method / Newton-Raphson method
+
+Newton's method is an algorithm is find where a function $f(\theta) = 0$
+
+The algorithm is:
+
+$\theta := \theta - \frac{f(\theta)}{f'(\theta)}$
+
+Note that maximizing a function is equivalent to finding where its derivative is zero, so we can employ Newton's method.
+
+For the general vector valued case, the generalization is the Newton-Raphson method (here we are looking to maximize $\ell$ hence seek where its Jacobian is zero):
+
+$\theta := \theta - H^{-1} \nabla_\theta \ell(\theta)$
+
+Note the following:
+
+- Newton's method typically converges much faster than batch gradient descent and requires fewer iterations
+- Though its potentially more computationally inefficient since it requires finding and inverting a Hessian
+- Also called Fisher scoring when used to maximize the logistic regression log likelihood function
+
+
+
+## Generalized linear models (will come back to this, kind of confused by it)
+
+Exponential family distributions can be written in the form:
+
+$p(y; \eta) = b(y) \exp(\eta^T T(y) - a(\eta))$
+
+Exponential family has a variety of desirable properties, most importantly the existence of a sufficient statistic $T(y)$
+
+The important features of GLMs are:
+
+- any GLM model is convex in its parameters
+- in general, calculating mean and variance of distributions is hard (involves integrals), but for GLMs they can be calculated from derivatives (easy)
+
+
+## Generative learning algorithms
+
+Algorithms that try to learn $p(y\mid x)$ are called discriminative learning algorithms
+
+Instead algos that try to learn $p(x\mid y)$ are called generative and can then use bayes rule for inference:
+
+$p(y\mid x) = \frac{p(x\mid y)p(y)}{p(x)}$
+
+### Gaussian discriminant analysis (GDA)
+
+Rather than do something like a logistic regression to solve a classification problem (which is modeling $p(y\mid x)$), instead approach it as follows:
+
+$y \sim \text{Bernoulli}(\phi)$
+
+$x\mid y = 0 \sim \mathcal{N}(\mu_0, \Sigma)$
+
+$x\mid y = 1 \sim \mathcal{N}(\mu_1, \Sigma)$
+
+Then seek to maximize the likelihood of the joint distribution $P(x, y) = P(x\mid y)P(y)$
+
+We can crunch this to analytically get all the needed parameters
 
 
 
 
 
+# Uncategorized
 
-
-
-xxx
-
-# Linear algebra
+## Linear algebra
 
 - gradient $\nabla f$(x) for $f: R^n \rightarrow R$
 - Hessian $\nabla^2 f$(x) for $f: R^n \rightarrow R$
@@ -92,7 +146,7 @@ xxx
 - important representations: $x^TAx$
 
 
-# a
+## a
 
 - batch gradient descent, mini-batch gradient descent, stochastic gradient descent
 - normal equation for linear regression
